@@ -9,7 +9,7 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="font-heading text-2xl font-bold text-primary">
-          Bella Moda
+          StoryRoupas
         </Link>
 
         <div className="flex items-center gap-6">
