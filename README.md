@@ -1,6 +1,8 @@
 # StoryRoupas 👗
 
-Loja online de roupas com design moderno em tons de lilás e marrom.
+Loja online de roupas com design moderno em tons de lilás e marrom. Este projeto está vinculado com o outro repositório, Fluxo pedido,
+Onde criei as APIS necessárias para o bom funcionamento.
+
 
 ## Funcionalidades
 
