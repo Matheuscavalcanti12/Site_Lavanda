@@ -10,12 +10,49 @@ export default function Signup() {
   const { setIsLoggedIn, setUserName } = useStore();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
-    setUserName(name);
-    navigate("/");
-  };
+const handleSubmit = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
+
+  try {
+    const response =
+      await fetch(
+        "http://localhost:5000/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            senha: password,
+          }),
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (response.ok) {
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      navigate("/");
+    } else {
+      alert("Cadastro inválido");
+    }
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Erro ao conectar API"
+    );
+  }
+};
 
   return (
     <div className="flex min-h-screen">

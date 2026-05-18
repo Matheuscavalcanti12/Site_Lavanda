@@ -8,13 +8,51 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const { setIsLoggedIn, setUserName } = useStore();
   const navigate = useNavigate();
+//para realizar a autenticação das requisiçôes das aPIS em TSX, será sempre no campo de
+//const const handleSubmit
+const handleSubmit = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
-    setUserName(email.split("@")[0]);
-    navigate("/");
-  };
+  try {
+    const response =
+      await fetch(
+        "http://localhost:5000/cadastro",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            senha: password,
+          }),
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (response.ok) {
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      navigate("/");
+    } else {
+      alert("Login inválido");
+    }
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Erro ao conectar API"
+    );
+  }
+};
 
   return (
     <div className="flex min-h-screen">
