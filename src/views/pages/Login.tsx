@@ -1,58 +1,55 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "@/controllers/StoreController";
+import { apiService } from "@/services/apiService";
 import loginIllustration from "@/assets/login-illustration.jpg";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsLoggedIn, setUserName } = useStore();
+  const { setIsLoggedIn, setUserName, setPedidoId } = useStore();
   const navigate = useNavigate();
-//para realizar a autenticação das requisiçôes das aPIS em TSX, será sempre no campo de
-//const const handleSubmit
-const handleSubmit = async (
-  e: React.FormEvent
-) => {
-  e.preventDefault();
 
-  try {
-    const response =
-      await fetch(
-        "http://localhost:5000/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            senha: password,
-          }),
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          senha: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        setUserName(email);
+        setIsLoggedIn(true);
+
+        // Criar um novo pedido para este usuário
+        if (data.usuarioId) {
+          const newPedido = await apiService.criarPedido(data.usuarioId);
+          if (newPedido?.id) {
+            setPedidoId(newPedido.id);
+            localStorage.setItem("pedidoId", newPedido.id.toString());
+          }
         }
-      );
 
-    const data =
-      await response.json();
-
-    if (response.ok) {
-      localStorage.setItem(
-        "token",
-        data.token
-      );
-
-      navigate("/");
-    } else {
-      alert("Login inválido");
+        navigate("/");
+      } else {
+        alert("Login inválido");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao conectar API");
     }
-  } catch (error) {
-    console.error(error);
-
-    alert(
-      "Erro ao conectar API"
-    );
-  }
-};
+  };
 
   return (
     <div className="flex min-h-screen">

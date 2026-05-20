@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "@/controllers/StoreController";
+import { apiService } from "@/services/apiService";
 import signupIllustration from "@/assets/signup-illustration.jpg";
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsLoggedIn, setUserName } = useStore();
+  const { setIsLoggedIn, setUserName, setPedidoId } = useStore();
   const navigate = useNavigate();
 
 const handleSubmit = async (
@@ -40,6 +41,17 @@ const handleSubmit = async (
         "token",
         data.token
       );
+      setUserName(name);
+      setIsLoggedIn(true);
+
+      // Criar um novo pedido para este usuário
+      if (data.usuarioId) {
+        const newPedido = await apiService.criarPedido(data.usuarioId);
+        if (newPedido?.id) {
+          setPedidoId(newPedido.id);
+          localStorage.setItem("pedidoId", newPedido.id.toString());
+        }
+      }
 
       navigate("/");
     } else {

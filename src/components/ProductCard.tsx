@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Product } from "@/models/StoreModels";
 import { useStore } from "@/controllers/StoreController";
 import { ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +10,16 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useStore();
+
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product);
+      toast.success("Produto adicionado ao carrinho!");
+    } catch (error) {
+      toast.error("Erro ao adicionar ao carrinho");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="group animate-fade-in overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md">
@@ -37,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
             R$ {product.price.toFixed(2).replace(".", ",")}
           </span>
           <button
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
             className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition-colors hover:bg-lilac-dark"
           >
             <ShoppingBag className="h-3.5 w-3.5" />

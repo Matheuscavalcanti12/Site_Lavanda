@@ -2,11 +2,23 @@ import { useParams, Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { useStore } from "@/controllers/StoreController";
 import { ShoppingBag, ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { products, addToCart } = useStore();
   const product = products.find((p) => p.id === Number(id));
+
+  const handleAddToCart = async () => {
+    if (!product) return;
+    try {
+      await addToCart(product);
+      toast.success("Produto adicionado ao carrinho!");
+    } catch (error) {
+      toast.error("Erro ao adicionar ao carrinho");
+      console.error(error);
+    }
+  };
 
   if (!product) {
     return (
@@ -39,7 +51,7 @@ export default function ProductDetail() {
               R$ {product.price.toFixed(2).replace(".", ",")}
             </p>
             <button
-              onClick={() => addToCart(product)}
+              onClick={handleAddToCart}
               className="mt-8 flex w-fit items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-colors hover:bg-lilac-dark"
             >
               <ShoppingBag className="h-5 w-5" />

@@ -7,6 +7,25 @@ import { toast } from "sonner";
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart, cartTotal } = useStore();
 
+  const handleUpdateQuantity = async (productId: number, newQuantity: number) => {
+    try {
+      await updateQuantity(productId, newQuantity);
+    } catch (error) {
+      toast.error("Erro ao atualizar quantidade");
+      console.error(error);
+    }
+  };
+
+  const handleRemoveFromCart = async (productId: number) => {
+    try {
+      await removeFromCart(productId);
+      toast.success("Produto removido do carrinho");
+    } catch (error) {
+      toast.error("Erro ao remover do carrinho");
+      console.error(error);
+    }
+  };
+
   const handleFinalize = () => {
     toast.success("Compra finalizada com sucesso! Obrigado pela preferência.");
   };
@@ -48,15 +67,15 @@ export default function Cart() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="rounded-md border border-border p-1 transition-colors hover:bg-muted">
+                      <button onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)} className="rounded-md border border-border p-1 transition-colors hover:bg-muted">
                         <Minus className="h-4 w-4" />
                       </button>
                       <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                      <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="rounded-md border border-border p-1 transition-colors hover:bg-muted">
+                      <button onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)} className="rounded-md border border-border p-1 transition-colors hover:bg-muted">
                         <Plus className="h-4 w-4" />
                       </button>
                     </div>
-                    <button onClick={() => removeFromCart(item.product.id)} className="text-destructive transition-colors hover:text-destructive/80">
+                    <button onClick={() => handleRemoveFromCart(item.product.id)} className="text-destructive transition-colors hover:text-destructive/80">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
