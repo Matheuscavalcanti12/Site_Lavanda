@@ -23,6 +23,9 @@ Onde criei as APIS necessárias para o bom funcionamento.
 ## Como rodar localmente
 
 ```bash
+Rode primeiro o projeto FluxoPedido com dotnet run
+Depois rode o site com:
+
 npm install
 npm run dev
 ```
