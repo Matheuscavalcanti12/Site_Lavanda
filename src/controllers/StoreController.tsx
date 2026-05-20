@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-import { products, Product, CartItem } from "@/models/StoreModels";
+import { products as initialProducts, Product, CartItem } from "@/models/StoreModels";
 import { apiService } from "@/services/apiService";
+
+const ADMIN_EMAIL = "admin@storyroupas.com";
 
 interface StoreContextType {
   products: Product[];
+  addProduct: (product: Omit<Product, "id">) => void;
   cart: CartItem[];
   addToCart: (product: Product) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
@@ -15,6 +18,7 @@ interface StoreContextType {
   setIsLoggedIn: (v: boolean) => void;
   userName: string;
   setUserName: (v: string) => void;
+  isAdmin: boolean;
   pedidoId: number | null;
   setPedidoId: (id: number) => void;
 }
@@ -22,6 +26,7 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
@@ -29,6 +34,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem("pedidoId");
     return saved ? parseInt(saved) : null;
   });
+
+  const isAdmin = isLoggedIn && userName.trim().toLowerCase() === ADMIN_EMAIL;
+
+  const addProduct = (product: Omit<Product, "id">) => {
+    setProducts((prev) => [
+      ...prev,
+      { ...product, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 },
+    ]);
+  };
 
   const addToCart = async (product: Product) => {
     if (!pedidoId) {
@@ -98,6 +112,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     <StoreContext.Provider
       value={{
         products,
+        addProduct,
         cart,
         addToCart,
         removeFromCart,
@@ -108,6 +123,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setIsLoggedIn,
         userName,
         setUserName,
+        isAdmin,
         pedidoId,
         setPedidoId,
       }}

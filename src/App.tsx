@@ -9,6 +9,7 @@ import Login from "@/views/pages/Login";
 import Signup from "@/views/pages/Signup";
 import ProductDetail from "@/views/pages/ProductDetail";
 import Cart from "@/views/pages/Cart";
+import CreateProduct from "@/views/pages/CreateProduct";
 import NotFound from "@/views/pages/NotFound";
 
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/signup" element={<Signup />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/create-product" element={<CreateProduct />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
