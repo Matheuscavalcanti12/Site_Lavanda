@@ -35,9 +35,10 @@ export default function Login() {
         // Criar um novo pedido para este usuário
         if (data.usuarioId) {
           const newPedido = await apiService.criarPedido(data.usuarioId);
-          if (newPedido?.id) {
-            setPedidoId(newPedido.id);
-            localStorage.setItem("pedidoId", newPedido.id.toString());
+          const pedidoId = newPedido?.pedidoId ?? newPedido?.id;
+          if (pedidoId) {
+            setPedidoId(pedidoId);
+            localStorage.setItem("pedidoId", pedidoId.toString());
           }
         }
 

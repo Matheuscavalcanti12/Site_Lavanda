@@ -11,6 +11,9 @@ import ProductDetail from "@/views/pages/ProductDetail";
 import Cart from "@/views/pages/Cart";
 import NotFound from "@/views/pages/NotFound";
 
+
+
+
 const queryClient = new QueryClient();
 
 const App = () => (
