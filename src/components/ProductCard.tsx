@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Product } from "@/contexts/StoreContext";
-import { useStore } from "@/contexts/StoreContext";
+import { Product } from "@/models/StoreModels";
+import { useStore } from "@/controllers/StoreController";
 import { ShoppingBag } from "lucide-react";
 
 interface ProductCardProps {

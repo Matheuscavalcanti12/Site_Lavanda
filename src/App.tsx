@@ -3,13 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { StoreProvider } from "@/contexts/StoreContext";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import NotFound from "./pages/NotFound";
+import { StoreProvider } from "@/controllers/StoreController";
+import Index from "@/views/pages/Index";
+import Login from "@/views/pages/Login";
+import Signup from "@/views/pages/Signup";
+import ProductDetail from "@/views/pages/ProductDetail";
+import Cart from "@/views/pages/Cart";
+import NotFound from "@/views/pages/NotFound";
 
 const queryClient = new QueryClient();
 

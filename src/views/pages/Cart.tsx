@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
-import { useStore } from "@/contexts/StoreContext";
+import { useStore } from "@/controllers/StoreController";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 

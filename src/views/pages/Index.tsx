@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
-import { useStore } from "@/contexts/StoreContext";
+import { useStore } from "@/controllers/StoreController";
 
 export default function Index() {
   const { products } = useStore();

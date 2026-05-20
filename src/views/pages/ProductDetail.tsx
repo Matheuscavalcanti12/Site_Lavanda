@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
-import { useStore } from "@/contexts/StoreContext";
+import { useStore } from "@/controllers/StoreController";
 import { ShoppingBag, ArrowLeft } from "lucide-react";
 
 export default function ProductDetail() {

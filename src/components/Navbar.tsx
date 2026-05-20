@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
-import { useStore } from "@/contexts/StoreContext";
+import { useStore } from "@/controllers/StoreController";
 
 export function Navbar() {
   const { cartCount } = useStore();
