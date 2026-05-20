@@ -3,7 +3,7 @@ import { ShoppingBag } from "lucide-react";
 import { useStore } from "@/controllers/StoreController";
 
 export function Navbar() {
-  const { cartCount } = useStore();
+  const { cartCount, isAdmin } = useStore();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
@@ -13,12 +13,21 @@ export function Navbar() {
         </Link>
 
         <div className="flex items-center gap-6">
+          {isAdmin && (
+            <Link
+              to="/create-product"
+              className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground transition-colors hover:bg-secondary"
+            >
+              Criar Produto
+            </Link>
+          )}
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">
             Produtos
           </Link>
           <Link to="/signup" className="text-sm font-medium text-foreground transition-colors hover:text-primary">
             Cadastrar
           </Link>
+
           <Link to="/cart" className="relative text-foreground transition-colors hover:text-primary">
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && (
