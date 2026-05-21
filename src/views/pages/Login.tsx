@@ -7,21 +7,12 @@ import loginIllustration from "@/assets/login-illustration.jpg";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [Role, setRole] = useState("");
   const { setIsLoggedIn, setUserName, setPedidoId } = useStore();
   const navigate = useNavigate();
-
+//login adm: admin@storyroupas.com
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Atalho de admin local (funciona sem a API)
-    if (email.trim().toLowerCase() === "admin@storyroupas.com") {
-      setUserName(email);
-      setIsLoggedIn(true);
-      navigate("/");
-      return;
-    }
-
-
 
     try {
       const response = await fetch("http://localhost:5000/login", {
@@ -32,6 +23,7 @@ export default function Login() {
         body: JSON.stringify({
           email,
           senha: password,
+          role: Role,
         }),
       });
 
@@ -40,6 +32,7 @@ export default function Login() {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         setUserName(email);
+        setRole(data.role);
         setIsLoggedIn(true);
 
         // Criar um novo pedido para este usuário
