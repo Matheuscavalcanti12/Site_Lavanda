@@ -13,6 +13,16 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Atalho de admin local (funciona sem a API)
+    if (email.trim().toLowerCase() === "admin@storyroupas.com") {
+      setUserName(email);
+      setIsLoggedIn(true);
+      navigate("/");
+      return;
+    }
+
+
+
     try {
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
