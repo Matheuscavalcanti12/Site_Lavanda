@@ -4,6 +4,9 @@ import { products as initialProducts, Product, CartItem } from "@/models/StoreMo
 import { apiService } from "@/services/apiService";
 
 const ADMIN_EMAIL = "admin@storyroupas.com";
+//login como administrador: admin@storyroupas.com
+//senha:123456
+//Problema de adicionar ao carrinho com este email
 
 interface StoreContextType {
   products: Product[];
