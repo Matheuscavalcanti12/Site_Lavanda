@@ -51,7 +51,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error(error);
-      alert("Erro ao conectar API");
+      alert("Erro, usuario ou senha incorretos");
     }
   };
 

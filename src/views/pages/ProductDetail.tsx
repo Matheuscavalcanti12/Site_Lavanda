@@ -18,11 +18,21 @@ export default function ProductDetail() {
     if (!product) return;
 
     try {
+      // Validação do preço
+      if (product.price <= 0) {
+        toast.error(
+          "Produto sem preço válido!"
+        );
+        return;
+      }
+
+      // Adiciona ao carrinho
       await addToCart(product);
 
       toast.success(
         "Produto adicionado ao carrinho!"
       );
+
     } catch (error) {
       console.error(error);
 
