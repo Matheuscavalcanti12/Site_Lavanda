@@ -9,7 +9,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useStore();
+ const { addToCart, isAdmin, deleteProduct } = useStore();
 
   const handleAddToCart = async () => {
     try {
@@ -54,6 +54,15 @@ export function ProductCard({ product }: ProductCardProps) {
             <ShoppingBag className="h-3.5 w-3.5" />
             Adicionar
           </button>
+           
+       {isAdmin && (
+       <button
+          onClick={() => deleteProduct(product.id)}
+          className="rounded-lg bg-red-500 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-600"
+        >
+         Excluir
+       </button>
+      )}
         </div>
       </div>
     </div>

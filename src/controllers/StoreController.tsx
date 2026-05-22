@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { toast } from "sonner";
 
 import { products as initialProducts, Product, CartItem } from "@/models/StoreModels";
 import { apiService } from "@/services/apiService";
 
 const ADMIN_EMAIL = "admin@storyroupas.com";
 //login como administrador: admin@storyroupas.com
-//senha:123456
-//Problema de adicionar ao carrinho com este email
+
+
 
 interface StoreContextType {
   products: Product[];
   addProduct: (product: Omit<Product, "id">) => void;
+  deleteProduct: (id: number) => Promise<void>;
   cart: CartItem[];
   addToCart: (product: Product) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
@@ -24,6 +26,7 @@ interface StoreContextType {
   isAdmin: boolean;
   pedidoId: number | null;
   setPedidoId: (id: number) => void;
+  
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -46,6 +49,26 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       { ...product, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 },
     ]);
   };
+
+  const deleteProduct = async (id: number) => {
+  if (!isAdmin) {
+    toast.error("Apenas administradores podem excluir produtos");
+    return;
+  }
+
+  try {
+    await apiService.deleteProduct(id);
+
+    setProducts((prev) =>
+      prev.filter((product) => product.id !== id)
+    );
+
+    toast.success("Produto removido!");
+  } catch (error) {
+    console.error(error);
+    toast.error("Erro ao excluir produto");
+  }
+};
 
   const addToCart = async (product: Product) => {
     if (!pedidoId) {
@@ -116,6 +139,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       value={{
         products,
         addProduct,
+        deleteProduct,
         cart,
         addToCart,
         removeFromCart,

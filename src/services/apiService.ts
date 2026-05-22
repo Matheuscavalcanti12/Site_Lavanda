@@ -35,6 +35,39 @@ export const apiService = {
     return response.json();
   },
 
+async deleteProduct(
+  pedidoId: number,
+  produtoId: number
+) {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/pedido/item",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          id_pedido: pedidoId,
+          id_produto: produtoId,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Erro ao remover item"
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+},
+
   async updateQuantidade(pedidoId: number, produtoId: number, quantidade: number) {
     const response = await fetch(`${API_BASE_URL}/pedido/item`, {
       method: "PUT",

@@ -21,6 +21,7 @@ export function Navbar() {
               Criar Produto
             </Link>
           )}
+        
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">
             Produtos
           </Link>
