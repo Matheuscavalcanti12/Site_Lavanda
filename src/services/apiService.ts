@@ -35,37 +35,19 @@ export const apiService = {
     return response.json();
   },
 
-async deleteProduct(
-  pedidoId: number,
-  produtoId: number
-) {
-  try {
-    const response = await fetch(
-      "http://localhost:5000/pedido/item",
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          id_pedido: pedidoId,
-          id_produto: produtoId,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao remover item"
-      );
+async deleteProduct(produtoId: number) {
+  const response = await fetch(
+    `${API_BASE_URL}/produto/${produtoId}`,
+    {
+      method: "DELETE",
     }
+  );
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
+  if (!response.ok) {
+    throw new Error("Erro ao excluir produto");
   }
+
+  return response.json();
 },
 
   async updateQuantidade(pedidoId: number, produtoId: number, quantidade: number) {
