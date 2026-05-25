@@ -35,26 +35,35 @@ export default function CreateProduct() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsedPrice = parseFloat(price.replace(",", "."));
-    if (!name || !brand || isNaN(parsedPrice) || !image) {
-      toast.error("Preencha todos os campos");
-      return;
-    }
+ const handleSubmit = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
 
-    addProduct({
-      name,
-      description: brand,
-      price: parsedPrice,
-      image,
-      category: brand,
-    });
+  const parsedPrice = parseFloat(price);
 
-    toast.success("Produto criado com sucesso!");
-    navigate("/");
-  };
+  if (
+    !name ||
+    !brand ||
+    !price ||
+    !image
+  ) {
+    toast.error(
+      "Preencha todos os campos"
+    );
+    return;
+  }
 
+  await addProduct({
+    name,
+    description: brand,
+    price: parsedPrice,
+    image,
+    category: brand,
+  });
+
+  navigate("/catalog");
+};
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
