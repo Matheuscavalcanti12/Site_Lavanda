@@ -62,7 +62,7 @@ export default function CreateProduct() {
     category: brand,
   });
 
-  navigate("/catalog");
+  navigate("/");
 };
   return (
     <div className="min-h-screen bg-background">

@@ -149,7 +149,7 @@ export const apiService = {
 
   async createProduct(product: {
     desc_produto: string;
-    valor: number;
+    preco: number;
     imagem: string;
     marca: string;
   }) {

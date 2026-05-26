@@ -129,16 +129,16 @@ export function StoreProvider({
           data.map(
             (produto: any) => ({
               id:
-                produto.id_produto,
+                produto.id,
 
               name:
-                produto.desc_produto,
+                produto.desc_produto || produto.descProduto,
 
               description:
-                produto.marca,
+                "",
 
               price:
-                produto.valor,
+                produto.preco,
 
               image:
                 produto.imagem,
@@ -180,7 +180,7 @@ export function StoreProvider({
             desc_produto:
               product.name,
 
-            valor:
+            preco:
               product.price,
 
             imagem:
