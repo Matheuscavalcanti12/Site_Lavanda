@@ -5,7 +5,7 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Cart() {
-  const { cart, updateQuantity, removeFromCart, cartTotal } = useStore();
+  const { cart, updateQuantity, removeFromCart, cartTotal, userName } = useStore();
 
   const handleUpdateQuantity = async (productId: number, newQuantity: number) => {
     try {
@@ -26,9 +26,34 @@ export default function Cart() {
     }
   };
 
-  const handleFinalize = () => {
-    toast.success("Compra finalizada com sucesso! Obrigado pela preferência.");
-  };
+   const handleFinalize = () => {
+    const itemsList = cart
+      .map(
+        (item) =>
+          `- *${item.product.name}* x${item.quantity} — R$ ${(item.product.price * item.quantity).toFixed(2).replace(".", ",")}`
+      )
+      .join("\n");
+
+    const message =
+      `*StoryRoupas* 🛍️\n` +
+      `Olá ${userName || "cliente"}, seu pedido foi registrado com sucesso!\n\n` +
+      `📋 *Resumo do Pedido:*\n${itemsList}\n\n` +
+      `💰 *Total: R$ ${cartTotal.toFixed(2).replace(".", ",")}*\n` +
+      `.\n` +
+      `📍 Retirada na loja — pagamento no local.\n` +
+      `Avise com antecedência em caso de necessidade.\n` +
+      `.\n`+
+      `Agradecemos pela preferência! 💜`;
+
+     const whatsappUrl =
+    `https://api.whatsapp.com/send?phone=5514991674959&text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank");
+
+  toast.success(
+    "Pedido finalizado! Redirecionando para WhatsApp..."
+  );
+};
 
   if (cart.length === 0) {
     return (
