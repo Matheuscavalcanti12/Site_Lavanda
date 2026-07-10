@@ -12,7 +12,7 @@ import {
   CartItem,
 } from "@/models/StoreModels";
 
-import { apiService } from "@/services/apiService";
+import { apiService, API_BASE_URL } from "@/services/apiService";
 
 const ADMIN_EMAIL =
   "admin@storyroupas.com";
@@ -113,7 +113,7 @@ export function StoreProvider({
       try {
         const response =
           await fetch(
-            "http://localhost:5000/listarProdutos"
+            `${API_BASE_URL}/listarProdutos`
           );
 
         if (!response.ok) {

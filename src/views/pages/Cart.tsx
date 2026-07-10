@@ -46,7 +46,7 @@ export default function Cart() {
       `Agradecemos pela preferência! 💜`;
 
      const whatsappUrl =
-    `https://api.whatsapp.com/send?phone=5514991674959&text=${encodeURIComponent(message)}`;
+    `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, "_blank");
 

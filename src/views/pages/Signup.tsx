@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "@/controllers/StoreController";
-import { apiService } from "@/services/apiService";
+import { apiService, API_BASE_URL } from "@/services/apiService";
 import signupIllustration from "@/assets/signup-illustration.jpg";
 
 export default function Signup() {
@@ -19,7 +19,7 @@ const handleSubmit = async (
   try {
     const response =
       await fetch(
-        "http://localhost:5000/cadastro",
+        `${API_BASE_URL}/cadastro`,
         {
           method: "POST",
           headers: {

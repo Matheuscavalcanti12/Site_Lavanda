@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "@/controllers/StoreController";
-import { apiService } from "@/services/apiService";
+import { apiService, API_BASE_URL } from "@/services/apiService";
 import loginIllustration from "@/assets/login-illustration.jpg";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [Role, setRole] = useState("");
+  const [role, setRole] = useState("");
   const { setIsLoggedIn, setUserName, setPedidoId } = useStore();
   const navigate = useNavigate();
 //login adm: admin@storyroupas.com
@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +23,6 @@ export default function Login() {
         body: JSON.stringify({
           email,
           senha: password,
-          role: Role,
         }),
       });
 
