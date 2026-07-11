@@ -1,4 +1,47 @@
-export const API_BASE_URL = `http://${window.location.hostname}:5000`;
+const configuredApiUrl = import.meta.env.VITE_API_URL;
+
+export const API_BASE_URL =
+  configuredApiUrl?.replace(/\/$/, "") ||
+  `http://${window.location.hostname}:5000`;
+
+async function parseResponse(response: Response) {
+  const text = await response.text();
+
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
+async function request<T>(
+  url: string,
+  options?: RequestInit,
+  errorMessage = "Erro ao conectar API"
+): Promise<T> {
+  const response = await fetch(url, options);
+  const data = await parseResponse(response);
+
+  if (!response.ok) {
+    const detailMessage =
+      typeof data === "object" && data && "detail" in data
+        ? String((data as { detail: string }).detail)
+        : null;
+
+    const apiMessage =
+      typeof data === "object" && data && "message" in data
+        ? String((data as ApiErrorResponse).message)
+        : detailMessage || errorMessage;
+
+    throw new Error(apiMessage);
+  }
+
+  return data as T;
+}
 
 export interface ApiErrorResponse {
   message: string;
@@ -10,7 +53,7 @@ export const apiService = {
     produtoId: number,
     quantidade: number
   ) {
-    const response = await fetch(
+    return request(
       `${API_BASE_URL}/pedido/item`,
       {
         method: "POST",
@@ -22,47 +65,27 @@ export const apiService = {
           id_produto: produtoId,
           quantidade: quantidade,
         }),
-      }
+      },
+      "Erro ao adicionar ao carrinho"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao adicionar ao carrinho"
-      );
-    }
-
-    return response.json();
   },
 
   async getCarrinho(pedidoId: number) {
-    const response = await fetch(
-      `${API_BASE_URL}/pedido/${pedidoId}/itens`
+    return request(
+      `${API_BASE_URL}/pedido/${pedidoId}/itens`,
+      undefined,
+      "Erro ao buscar carrinho"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao buscar carrinho"
-      );
-    }
-
-    return response.json();
   },
 
   async deleteProduct(produtoId: number) {
-    const response = await fetch(
+    return request(
       `${API_BASE_URL}/produto/${produtoId}`,
       {
         method: "DELETE",
-      }
+      },
+      "Erro ao excluir produto"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao excluir produto"
-      );
-    }
-
-    return response.json();
   },
 
   async updateQuantidade(
@@ -70,7 +93,7 @@ export const apiService = {
     produtoId: number,
     quantidade: number
   ) {
-    const response = await fetch(
+    return request(
       `${API_BASE_URL}/pedido/item`,
       {
         method: "PUT",
@@ -83,23 +106,16 @@ export const apiService = {
           id_produto: produtoId,
           quantidade: quantidade,
         }),
-      }
+      },
+      "Erro ao atualizar quantidade"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao atualizar quantidade"
-      );
-    }
-
-    return response.json();
   },
 
   async removeFromCart(
     pedidoId: number,
     produtoId: number
   ) {
-    const response = await fetch(
+    return request(
       `${API_BASE_URL}/pedido/item`,
       {
         method: "DELETE",
@@ -111,20 +127,13 @@ export const apiService = {
           id_pedido: pedidoId,
           id_produto: produtoId,
         }),
-      }
+      },
+      "Erro ao remover do carrinho"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao remover do carrinho"
-      );
-    }
-
-    return response.json();
   },
 
   async criarPedido(usuarioId: number) {
-    const response = await fetch(
+    return request<{ pedidoId: number }>(
       `${API_BASE_URL}/pedido`,
       {
         method: "POST",
@@ -135,16 +144,9 @@ export const apiService = {
         body: JSON.stringify({
           id_usuario: usuarioId,
         }),
-      }
+      },
+      "Erro ao criar pedido"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao criar pedido"
-      );
-    }
-
-    return response.json();
   },
 
   async createProduct(product: {
@@ -153,7 +155,7 @@ export const apiService = {
     imagem: string;
     marca: string;
   }) {
-    const response = await fetch(
+    return request(
       `${API_BASE_URL}/produto`,
       {
         method: "POST",
@@ -162,15 +164,8 @@ export const apiService = {
             "application/json",
         },
         body: JSON.stringify(product),
-      }
+      },
+      "Erro ao adicionar produto"
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Erro ao adicionar produto"
-      );
-    }
-
-    return response.json();
   },
 };

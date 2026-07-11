@@ -34,15 +34,18 @@ interface StoreContextType {
   cart: CartItem[];
 
   addToCart: (
-    product: Product
+    product: Product,
+    size: string
   ) => Promise<void>;
 
   removeFromCart: (
-    productId: number
+    productId: number,
+    size: string
   ) => Promise<void>;
 
   updateQuantity: (
     productId: number,
+    size: string,
     quantity: number
   ) => Promise<void>;
 
@@ -84,10 +87,16 @@ export function StoreProvider({
     useState<CartItem[]>([]);
 
   const [isLoggedIn, setIsLoggedIn] =
-    useState(false);
+    useState(() =>
+      Boolean(localStorage.getItem("token"))
+    );
 
   const [userName, setUserName] =
-    useState("");
+    useState(
+      () =>
+        localStorage.getItem("userEmail") ||
+        ""
+    );
 
   const [pedidoId, setPedidoId] =
     useState<number | null>(() => {
@@ -167,6 +176,22 @@ export function StoreProvider({
     loadProducts();
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn && userName) {
+      localStorage.setItem(
+        "userEmail",
+        userName
+      );
+      return;
+    }
+
+    if (!isLoggedIn) {
+      localStorage.removeItem(
+        "userEmail"
+      );
+    }
+  }, [isLoggedIn, userName]);
+
   const addProduct =
     async (
       product: Omit<
@@ -231,14 +256,17 @@ export function StoreProvider({
         console.error(error);
 
         toast.error(
-          "Erro ao excluir produto"
+          error instanceof Error
+            ? error.message
+            : "Erro ao excluir produto"
         );
       }
     };
 
   const addToCart =
     async (
-      product: Product
+      product: Product,
+      size: string
     ) => {
       if (!pedidoId) {
         throw new Error(
@@ -258,14 +286,16 @@ export function StoreProvider({
             prev.find(
               (item) =>
                 item.product.id ===
-                product.id
+                  product.id &&
+                item.size === size
             );
 
           if (existing) {
             return prev.map(
               (item) =>
                 item.product.id ===
-                product.id
+                  product.id &&
+                item.size === size
                   ? {
                       ...item,
                       quantity:
@@ -281,6 +311,7 @@ export function StoreProvider({
             {
               product,
               quantity: 1,
+              size,
             },
           ];
         });
@@ -296,7 +327,8 @@ export function StoreProvider({
 
   const removeFromCart =
     async (
-      productId: number
+      productId: number,
+      size: string
     ) => {
       if (!pedidoId) {
         throw new Error(
@@ -313,8 +345,8 @@ export function StoreProvider({
         setCart((prev) =>
           prev.filter(
             (item) =>
-              item.product.id !==
-              productId
+              item.product.id !== productId ||
+              item.size !== size
           )
         );
       } catch (error) {
@@ -330,6 +362,7 @@ export function StoreProvider({
   const updateQuantity =
     async (
       productId: number,
+      size: string,
       quantity: number
     ) => {
       if (!pedidoId) {
@@ -340,7 +373,8 @@ export function StoreProvider({
 
       if (quantity <= 0) {
         await removeFromCart(
-          productId
+          productId,
+          size
         );
 
         return;
@@ -356,7 +390,8 @@ export function StoreProvider({
         setCart((prev) =>
           prev.map((item) =>
             item.product.id ===
-            productId
+              productId &&
+            item.size === size
               ? {
                   ...item,
                   quantity,

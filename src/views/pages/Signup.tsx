@@ -41,13 +41,17 @@ const handleSubmit = async (
         "token",
         data.token
       );
-      setUserName(name);
+      localStorage.setItem(
+        "userEmail",
+        email
+      );
+      setUserName(email);
       setIsLoggedIn(true);
 
       // Criar um novo pedido para este usuário
       if (data.usuarioId) {
         const newPedido = await apiService.criarPedido(data.usuarioId);
-        const pedidoId = typeof newPedido === "number" ? newPedido : newPedido?.pedidoId ?? newPedido?.id;
+        const pedidoId = newPedido.pedidoId;
         if (pedidoId) {
           setPedidoId(pedidoId);
           localStorage.setItem("pedidoId", pedidoId.toString());

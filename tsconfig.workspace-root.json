@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./Site_Lavanda/src/*"]
+    },
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "target": "ES2020",
+    "module": "ESNext",
+    "strict": false,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["Site_Lavanda/src"]
+}

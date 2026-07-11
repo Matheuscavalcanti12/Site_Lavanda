@@ -30,6 +30,7 @@ export default function Login() {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", email);
         setUserName(email);
         setRole(data.role);
         setIsLoggedIn(true);
@@ -37,7 +38,7 @@ export default function Login() {
         // Criar um novo pedido para este usuário
         if (data.usuarioId) {
           const newPedido = await apiService.criarPedido(data.usuarioId);
-          const pedidoId = typeof newPedido === "number" ? newPedido : newPedido?.pedidoId ?? newPedido?.id;
+          const pedidoId = newPedido.pedidoId;
           if (pedidoId) {
             setPedidoId(pedidoId);
             localStorage.setItem("pedidoId", pedidoId.toString());
