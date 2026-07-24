@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./Site_Lavanda/src/*"]
+      "@/*": ["./src/*"]
     },
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["Site_Lavanda/src"]
+  "include": ["src"]
 }
